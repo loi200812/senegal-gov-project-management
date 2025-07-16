@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- National Vision Form View -->
+        <record id="view_government_national_vision_form" model="ir.ui.view">
+            <field name="name">government.national.vision.form</field>
+            <field name="model">government.national.vision</field>
+            <field name="arch" type="xml">
+                <form string="National Vision">
+                    <header>
+                        <button name="action_view_axes" type="object" class="oe_highlight" string="View Strategic Axes"/>
+                        <button name="action_view_projects" type="object" class="btn-primary" string="View Projects"/>
+                        <button name="action_view_qr_code" type="object" string="QR Code" class="btn-secondary"/>
+                    </header>
+                    <sheet>
+                        <field name="qr_code" widget="image" class="oe_avatar" options="{'preview_image': 'qr_code'}"/>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="Vision Name"/></h1>
+                            <h3>
+                                <label for="start_year" class="oe_edit_only"/>
+                                <field name="start_year" class="oe_inline"/> - 
+                                <field name="end_year" class="oe_inline"/>
+                            </h3>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="active" invisible="1"/>
+                                <field name="president_id"/>
+                                <field name="axis_count"/>
+                                <field name="project_count"/>
+                            </group>
+                            <group>
+                                <field name="url" widget="url"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Description" name="description">
+                                <field name="description" nolabel="1" placeholder="Detailed description of the national vision..."/>
+                            </page>
+                            <page string="Strategic Axes" name="axes">
+                                <field name="axis_ids" nolabel="1">
+                                    <tree>
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="project_count"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Documents" name="documents">
+                                <field name="attachment_ids" nolabel="1">
+                                    <kanban>
+                                        <field name="id"/>
+                                        <field name="name"/>
+                                        <field name="mimetype"/>
+                                        <templates>
+                                            <t t-name="kanban-box">
+                                                <div class="oe_kanban_global_click">
+                                                    <div class="oe_kanban_vignette">
+                                                        <div class="oe_attachment">
+                                                            <div class="oe_name">
+                                                                <field name="name"/>
+                                                            </div>
+                                                            <div class="text-center">
+                                                                <a t-attf-href="/web/content/#{id}?download=true">
+                                                                    <i t-att-class="'fa ' + (mimetype.includes('pdf') ? 'fa-file-pdf-o' : mimetype.includes('image') ? 'fa-file-image-o' : 'fa-file-text-o')"/>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- National Vision Tree View -->
+        <record id="view_government_national_vision_tree" model="ir.ui.view">
+            <field name="name">government.national.vision.tree</field>
+            <field name="model">government.national.vision</field>
+            <field name="arch" type="xml">
+                <tree string="National Visions" sample="1">
+                    <field name="name"/>
+                    <field name="start_year"/>
+                    <field name="end_year"/>
+                    <field name="president_id"/>
+                    <field name="axis_count"/>
+                    <field name="project_count"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- National Vision Search View -->
+        <record id="view_government_national_vision_search" model="ir.ui.view">
+            <field name="name">government.national.vision.search</field>
+            <field name="model">government.national.vision</field>
+            <field name="arch" type="xml">
+                <search string="Search National Visions">
+                    <field name="name" string="Vision"/>
+                    <field name="president_id"/>
+                    <filter string="Current" name="current" domain="[('start_year','&lt;=', context_today().year()), ('end_year','>=', context_today().year())]"/>
+                    <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="President" name="president" context="{'group_by': 'president_id'}"/>
+                        <filter string="Start Year" name="start_year" context="{'group_by': 'start_year'}"/>
+                        <filter string="Company" name="company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- National Vision Kanban View -->
+        <record id="view_government_national_vision_kanban" model="ir.ui.view">
+            <field name="name">government.national.vision.kanban</field>
+            <field name="model">government.national.vision</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" sample="1">
+                    <field name="name"/>
+                    <field name="start_year"/>
+                    <field name="end_year"/>
+                    <field name="president_id"/>
+                    <field name="axis_count"/>
+                    <field name="project_count"/>
+                    <field name="id"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div class="oe_kanban_details">
+                                    <strong class="o_kanban_record_title"><field name="name"/></strong>
+                                    <div class="o_kanban_tags_section">
+                                        <ul>
+                                            <li class="badge badge-pill badge-primary">
+                                                <strong><field name="start_year"/> - <field name="end_year"/></strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="o_kanban_record_bottom">
+                                        <div class="oe_kanban_bottom_left">
+                                            <field name="president_id"/>
+                                        </div>
+                                        <div class="oe_kanban_bottom_right">
+                                            <span class="badge badge-info">
+                                                <i class="fa fa-sitemap"/> <field name="axis_count"/>
+                                            </span>
+                                            <span class="badge badge-secondary">
+                                                <i class="fa fa-tasks"/> <field name="project_count"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- National Vision Action -->
+        <record id="action_government_national_vision" model="ir.actions.act_window">
+            <field name="name">National Visions</field>
+            <field name="res_model">government.national.vision</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new national vision
+                </p>
+                <p>
+                    Create national visions to define the country's strategic development goals.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

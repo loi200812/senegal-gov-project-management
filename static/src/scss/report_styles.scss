@@ -1,0 +1,134 @@
+// Report styles for Government Project Management Module
+
+.gov_report {
+    h1, h2, h3, h4, h5, h6 {
+        color: #0056b3;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        border-bottom: 1px solid #dee2e6;
+        padding-bottom: 0.5rem;
+    }
+
+    h3 {
+        font-size: 1.3rem;
+    }
+
+    h4 {
+        font-size: 1.1rem;
+    }
+
+    .report-header {
+        margin-bottom: 2rem;
+    }
+
+    .report-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .report-footer {
+        margin-top: 2rem;
+        text-align: center;
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+
+    table {
+        width: 100%;
+        margin-bottom: 1rem;
+        
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        th, td {
+            padding: 0.5rem;
+            border: 1px solid #dee2e6;
+        }
+    }
+
+    .project-info {
+        background-color: #f8f9fa;
+        border-radius: 4px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .qr-code-container {
+        text-align: right;
+        margin-bottom: 1rem;
+        
+        img {
+            max-width: 100px;
+            border: 1px solid #dee2e6;
+            padding: 4px;
+            background-color: white;
+        }
+    }
+
+    .progress-container {
+        margin: 1rem 0;
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+        
+        .progress {
+            height: 1rem;
+            border-radius: 0.25rem;
+        }
+    }
+
+    .signature-block {
+        margin-top: 3rem;
+        padding-top: 1rem;
+        border-top: 1px solid #dee2e6;
+        
+        .signature-line {
+            border-top: 1px solid #000;
+            width: 200px;
+            margin: 0 auto;
+            margin-top: 2rem;
+        }
+    }
+}
+
+// Print-specific styles
+@media print {
+    .gov_report {
+        font-size: 10pt;
+        
+        h1 {
+            font-size: 16pt;
+        }
+        
+        h2 {
+            font-size: 14pt;
+        }
+        
+        h3 {
+            font-size: 12pt;
+        }
+        
+        h4 {
+            font-size: 11pt;
+        }
+        
+        .page-break-after {
+            page-break-after: always;
+        }
+    }
+}

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- National Vision -->
+        <record id="national_vision_senegal_2050" model="government.national.vision">
+            <field name="name">Sénégal Vision 2050</field>
+            <field name="start_year">2023</field>
+            <field name="end_year">2050</field>
+            <field name="description">Senegal Vision 2050 is the long-term national development strategy of President Diomaye Faye's administration, focusing on sustainable and inclusive growth to transform Senegal into an emergent economy by 2050.</field>
+        </record>
+        
+        <!-- Strategic Axes -->
+        <record id="strategic_axis_economic" model="government.strategic.axis">
+            <field name="name">Economic Transformation and Growth</field>
+            <field name="code">ECO-01</field>
+            <field name="vision_id" ref="national_vision_senegal_2050"/>
+            <field name="description">Accelerating economic transformation through industrialization, digital economy development, and creation of a business-friendly environment.</field>
+            <field name="sequence">10</field>
+        </record>
+        
+        <record id="strategic_axis_human_capital" model="government.strategic.axis">
+            <field name="name">Human Capital Development</field>
+            <field name="code">HCD-02</field>
+            <field name="vision_id" ref="national_vision_senegal_2050"/>
+            <field name="description">Investing in education, healthcare, skills development, and social protection to build Senegal's human capital for the future.</field>
+            <field name="sequence">20</field>
+        </record>
+        
+        <record id="strategic_axis_governance" model="government.strategic.axis">
+            <field name="name">Governance and Institutional Reform</field>
+            <field name="code">GOV-03</field>
+            <field name="vision_id" ref="national_vision_senegal_2050"/>
+            <field name="description">Strengthening governance, transparency, accountability, and institutional capacity at all levels of government.</field>
+            <field name="sequence">30</field>
+        </record>
+        
+        <record id="strategic_axis_infrastructure" model="government.strategic.axis">
+            <field name="name">Infrastructure Development</field>
+            <field name="code">INF-04</field>
+            <field name="vision_id" ref="national_vision_senegal_2050"/>
+            <field name="description">Building modern, sustainable infrastructure to support economic growth, including transportation, energy, and digital connectivity.</field>
+            <field name="sequence">40</field>
+        </record>
+        
+        <record id="strategic_axis_environment" model="government.strategic.axis">
+            <field name="name">Environmental Sustainability and Climate Resilience</field>
+            <field name="code">ENV-05</field>
+            <field name="vision_id" ref="national_vision_senegal_2050"/>
+            <field name="description">Promoting environmental protection, sustainable resource management, and building resilience to climate change impacts.</field>
+            <field name="sequence">50</field>
+        </record>
+        
+        <!-- Ministries -->
+        <record id="ministry_finance" model="government.ministry">
+            <field name="name">Ministry of Finance and Budget</field>
+            <field name="code">MINFIN</field>
+            <field name="description">Responsible for financial management, budget planning, economic policy, and treasury operations.</field>
+        </record>
+        
+        <record id="ministry_infrastructure" model="government.ministry">
+            <field name="name">Ministry of Infrastructure and Land Transport</field>
+            <field name="code">MININFRA</field>
+            <field name="description">Responsible for the development and maintenance of infrastructure including roads, bridges, and public buildings.</field>
+        </record>
+        
+        <record id="ministry_education" model="government.ministry">
+            <field name="name">Ministry of National Education</field>
+            <field name="code">MINEDU</field>
+            <field name="description">Responsible for the education system, including primary, secondary, and higher education.</field>
+        </record>
+        
+        <record id="ministry_health" model="government.ministry">
+            <field name="name">Ministry of Health and Social Action</field>
+            <field name="code">MINSANTE</field>
+            <field name="description">Responsible for healthcare services, public health programs, and social welfare initiatives.</field>
+        </record>
+        
+        <record id="ministry_agriculture" model="government.ministry">
+            <field name="name">Ministry of Agriculture and Rural Equipment</field>
+            <field name="code">MINAGRI</field>
+            <field name="description">Responsible for agricultural policy, food security, and rural development.</field>
+        </record>
+    </data>
+</odoo>

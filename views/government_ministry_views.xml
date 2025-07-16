@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Ministry Form View -->
+        <record id="view_government_ministry_form" model="ir.ui.view">
+            <field name="name">government.ministry.form</field>
+            <field name="model">government.ministry</field>
+            <field name="arch" type="xml">
+                <form string="Ministry">
+                    <header>
+                        <button name="action_view_projects" type="object" class="oe_highlight" string="View Projects"/>
+                        <button name="action_view_qr_code" type="object" string="QR Code" class="btn-secondary"/>
+                    </header>
+                    <sheet>
+                        <field name="qr_code" widget="image" class="oe_avatar" options="{'preview_image': 'qr_code'}"/>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="Ministry Name"/></h1>
+                            <h3>
+                                <field name="code" placeholder="Ministry Code"/>
+                            </h3>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="active" invisible="1"/>
+                                <field name="minister_id"/>
+                                <field name="minister_title"/>
+                                <field name="minister_phone" widget="phone"/>
+                                <field name="minister_email" widget="email"/>
+                            </group>
+                            <group>
+                                <field name="phone" widget="phone"/>
+                                <field name="email" widget="email"/>
+                                <field name="website" widget="url"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Contact Information" name="contact_info">
+                                <group>
+                                    <field name="address"/>
+                                    <field name="logo" widget="image"/>
+                                </group>
+                            </page>
+                            <page string="Projects" name="projects">
+                                <group>
+                                    <field name="project_count" invisible="1"/>
+                                    <field name="projects_responsible_ids" nolabel="1" context="{'tree_view_ref': 'senegal_gov_project_management.view_project_government_project_tree'}"/>
+                                </group>
+                            </page>
+                            <page string="Description" name="description">
+                                <field name="description" nolabel="1" placeholder="Detailed description about the ministry..."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Ministry Tree View -->
+        <record id="view_government_ministry_tree" model="ir.ui.view">
+            <field name="name">government.ministry.tree</field>
+            <field name="model">government.ministry</field>
+            <field name="arch" type="xml">
+                <tree string="Ministries" sample="1">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="minister_id"/>
+                    <field name="phone"/>
+                    <field name="email"/>
+                    <field name="project_count"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Ministry Search View -->
+        <record id="view_government_ministry_search" model="ir.ui.view">
+            <field name="name">government.ministry.search</field>
+            <field name="model">government.ministry</field>
+            <field name="arch" type="xml">
+                <search string="Search Ministries">
+                    <field name="name" string="Ministry"/>
+                    <field name="code"/>
+                    <field name="minister_id"/>
+                    <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Company" name="company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Ministry Kanban View -->
+        <record id="view_government_ministry_kanban" model="ir.ui.view">
+            <field name="name">government.ministry.kanban</field>
+            <field name="model">government.ministry</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" sample="1">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="minister_id"/>
+                    <field name="project_count"/>
+                    <field name="id"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div class="row mb4">
+                                    <div class="col-6">
+                                        <strong><field name="name"/></strong>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <span class="badge badge-pill">
+                                            <strong>Code: </strong><field name="code"/>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <span><field name="minister_id"/></span>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <span class="badge badge-info">
+                                            <i class="fa fa-building-o"/> <field name="project_count"/> Projects
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Ministry Action -->
+        <record id="action_government_ministry" model="ir.actions.act_window">
+            <field name="name">Ministries</field>
+            <field name="res_model">government.ministry</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new ministry
+                </p>
+                <p>
+                    Create ministries to track government projects by responsible department.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Government Report Form View -->
+        <record id="view_project_government_report_form" model="ir.ui.view">
+            <field name="name">project.government.report.form</field>
+            <field name="model">project.government.report</field>
+            <field name="arch" type="xml">
+                <form string="Project Report">
+                    <header>
+                        <button name="action_submit" type="object" string="Submit" class="oe_highlight" states="draft"/>
+                        <button name="action_approve" type="object" string="Approve" class="oe_highlight" 
+                                states="submitted" groups="senegal_gov_project_management.group_government_ministry_official"/>
+                        <button name="action_reject" type="object" string="Reject" 
+                                states="submitted" groups="senegal_gov_project_management.group_government_ministry_official"/>
+                        <button name="action_reset_to_draft" type="object" string="Reset to Draft" 
+                                states="submitted,approved,rejected"/>
+                        <button name="action_send_by_email" type="object" string="Send by Email" class="btn-primary"
+                                states="approved" groups="senegal_gov_project_management.group_government_project_manager"/>
+                        <button name="action_print_report" type="object" string="Print" class="btn-secondary"
+                                states="submitted,approved"/>
+                        <button name="action_view_qr_code" type="object" string="QR Code" class="btn-secondary"/>
+                        <field name="status" widget="statusbar" statusbar_visible="draft,submitted,approved,rejected"/>
+                    </header>
+                    <sheet>
+                        <field name="qr_code" widget="image" class="oe_avatar" options="{'preview_image': 'qr_code'}"/>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="Report Title"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="active" invisible="1"/>
+                                <field name="project_id" options="{'no_create': True}"/>
+                                <field name="report_date"/>
+                                <field name="report_type"/>
+                                <field name="color" widget="color_picker" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="period_start"/>
+                                <field name="period_end"/>
+                                <field name="generated_by_id" readonly="1"/>
+                                <field name="approved_by_id" readonly="1" attrs="{'invisible': [('approved_by_id', '=', False)]}"/>
+                                <field name="approval_date" readonly="1" attrs="{'invisible': [('approval_date', '=', False)]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Executive Summary" name="summary">
+                                <field name="summary" placeholder="Provide a concise summary of the project status..."/>
+                            </page>
+                            <page string="Content" name="content">
+                                <field name="content" widget="html" placeholder="Detailed report content..."/>
+                            </page>
+                            <page string="Key Achievements &amp; Challenges" name="achievements">
+                                <group>
+                                    <field name="key_achievements" placeholder="List the key achievements for this reporting period..."/>
+                                    <field name="challenges" placeholder="Describe any challenges encountered..."/>
+                                </group>
+                            </page>
+                            <page string="Recommendations &amp; Next Steps" name="recommendations">
+                                <group>
+                                    <field name="recommendations" placeholder="Provide recommendations for addressing challenges..."/>
+                                    <field name="next_steps" placeholder="Outline the next steps for the project..."/>
+                                </group>
+                            </page>
+                            <page string="Project Metrics" name="metrics">
+                                <group>
+                                    <group>
+                                        <field name="project_progress" widget="progressbar" readonly="1"/>
+                                        <field name="project_budget_usage" widget="progressbar" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Attachments" name="attachments">
+                                <field name="attachment_ids" widget="many2many_binary"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Government Report Tree View -->
+        <record id="view_project_government_report_tree" model="ir.ui.view">
+            <field name="name">project.government.report.tree</field>
+            <field name="model">project.government.report</field>
+            <field name="arch" type="xml">
+                <tree string="Project Reports" sample="1" decoration-muted="status == 'rejected'" decoration-success="status == 'approved'" decoration-info="status == 'draft'">
+                    <field name="name"/>
+                    <field name="project_id"/>
+                    <field name="report_date"/>
+                    <field name="report_type"/>
+                    <field name="period_start"/>
+                    <field name="period_end"/>
+                    <field name="status"/>
+                    <field name="generated_by_id"/>
+                    <field name="approved_by_id"/>
+                    <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Government Report Search View -->
+        <record id="view_project_government_report_search" model="ir.ui.view">
+            <field name="name">project.government.report.search</field>
+            <field name="model">project.government.report</field>
+            <field name="arch" type="xml">
+                <search string="Search Reports">
+                    <field name="name" string="Report"/>
+                    <field name="project_id"/>
+                    <field name="generated_by_id"/>
+                    <separator/>
+                    <filter string="My Reports" name="my_reports" domain="[('generated_by_id', '=', uid)]"/>
+                    <separator/>
+                    <filter string="Draft" name="draft" domain="[('status', '=', 'draft')]"/>
+                    <filter string="Submitted" name="submitted" domain="[('status', '=', 'submitted')]"/>
+                    <filter string="Approved" name="approved" domain="[('status', '=', 'approved')]"/>
+                    <filter string="Rejected" name="rejected" domain="[('status', '=', 'rejected')]"/>
+                    <separator/>
+                    <filter string="Weekly" name="weekly" domain="[('report_type', '=', 'weekly')]"/>
+                    <filter string="Monthly" name="monthly" domain="[('report_type', '=', 'monthly')]"/>
+                    <filter string="Quarterly" name="quarterly" domain="[('report_type', '=', 'quarterly')]"/>
+                    <filter string="Annual" name="annual" domain="[('report_type', '=', 'annual')]"/>
+                    <filter string="Special" name="special" domain="[('report_type', '=', 'special')]"/>
+                    <separator/>
+                    <filter string="This Year" name="this_year" domain="[('report_date', '>=', time.strftime('%Y-01-01'))]"/>
+                    <filter string="This Month" name="this_month" domain="[('report_date', '>=', time.strftime('%Y-%m-01'))]"/>
+                    <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Project" name="project" context="{'group_by': 'project_id'}"/>
+                        <filter string="Status" name="status" context="{'group_by': 'status'}"/>
+                        <filter string="Report Type" name="report_type" context="{'group_by': 'report_type'}"/>
+                        <filter string="Report Date" name="report_date" context="{'group_by': 'report_date:month'}"/>
+                        <filter string="Generated By" name="generated_by" context="{'group_by': 'generated_by_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Government Report Calendar View -->
+        <record id="view_project_government_report_calendar" model="ir.ui.view">
+            <field name="name">project.government.report.calendar</field>
+            <field name="model">project.government.report</field>
+            <field name="arch" type="xml">
+                <calendar string="Reports" date_start="report_date" color="project_id" mode="month">
+                    <field name="name"/>
+                    <field name="project_id"/>
+                    <field name="report_type"/>
+                    <field name="status"/>
+                </calendar>
+            </field>
+        </record>
+
+        <!-- Government Report Kanban View -->
+        <record id="view_project_government_report_kanban" model="ir.ui.view">
+            <field name="name">project.government.report.kanban</field>
+            <field name="model">project.government.report</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="status" sample="1">
+                    <field name="name"/>
+                    <field name="project_id"/>
+                    <field name="report_date"/>
+                    <field name="report_type"/>
+                    <field name="status"/>
+                    <field name="color"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click oe_kanban_card oe_kanban_has_border_color
+                                                oe_kanban_color_#{kanban_color(record.color.raw_value)}">
+                                <div class="o_dropdown_kanban dropdown">
+                                    <a class="dropdown-toggle o-no-caret btn" role="button" data-toggle="dropdown" href="#" 
+                                       aria-label="Dropdown menu" title="Dropdown menu">
+                                        <span class="fa fa-ellipsis-v"/>
+                                    </a>
+                                    <div class="dropdown-menu" role="menu">
+                                        <t t-if="widget.editable">
+                                            <a role="menuitem" type="edit" class="dropdown-item">Edit</a>
+                                        </t>
+                                        <a role="menuitem" class="dropdown-item" name="action_view_qr_code" type="object">QR Code</a>
+                                        <div role="separator" class="dropdown-divider"/>
+                                        <ul class="oe_kanban_colorpicker" data-field="color"/>
+                                    </div>
+                                </div>
+                                <div class="oe_kanban_content">
+                                    <div>
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                    <div>
+                                        <span class="badge badge-pill" 
+                                            t-attf-class="badge-#{record.report_type.raw_value == 'weekly' ? 'info' : record.report_type.raw_value == 'monthly' ? 'primary' : record.report_type.raw_value == 'quarterly' ? 'warning' : record.report_type.raw_value == 'annual' ? 'success' : 'secondary'}">
+                                            <field name="report_type"/>
+                                        </span>
+                                    </div>
+                                    <div class="text-muted">
+                                        <field name="report_date"/>
+                                    </div>
+                                    <div class="mt-2 mb-2">
+                                        <field name="project_id"/>
+                                    </div>
+                                    <div class="o_kanban_record_bottom">
+                                        <div class="oe_kanban_bottom_left">
+                                            <field name="generated_by_id" widget="many2one_avatar_user"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Government Report Action -->
+        <record id="action_project_government_report" model="ir.actions.act_window">
+            <field name="name">Project Reports</field>
+            <field name="res_model">project.government.report</field>
+            <field name="view_mode">tree,form,kanban,calendar</field>
+            <field name="context">{'search_default_this_month': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new project report
+                </p>
+                <p>
+                    Track progress and status of government projects with detailed reports.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

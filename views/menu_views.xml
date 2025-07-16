@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Main Menu -->
+        <menuitem id="menu_government_project_root"
+                  name="Government Projects"
+                  web_icon="senegal_gov_project_management,static/description/icon.png"
+                  sequence="90"/>
+        
+        <!-- Dashboard Menu -->
+        <menuitem id="menu_government_project_dashboard"
+                  name="Dashboard"
+                  parent="menu_government_project_root"
+                  action="action_project_government_project"
+                  sequence="1"/>
+        
+        <!-- Projects Menu -->
+        <menuitem id="menu_government_projects"
+                  name="Projects"
+                  parent="menu_government_project_root"
+                  sequence="10"/>
+        
+        <menuitem id="menu_government_project_list"
+                  name="Projects"
+                  parent="menu_government_projects"
+                  action="action_project_government_project"
+                  sequence="1"/>
+        
+        <menuitem id="menu_government_project_task"
+                  name="Tasks"
+                  parent="menu_government_projects"
+                  action="action_project_government_task"
+                  sequence="2"/>
+        
+        <menuitem id="menu_government_project_report"
+                  name="Reports"
+                  parent="menu_government_projects"
+                  action="action_project_government_report"
+                  sequence="3"/>
+        
+        <!-- National Vision Menu -->
+        <menuitem id="menu_government_vision"
+                  name="National Vision"
+                  parent="menu_government_project_root"
+                  sequence="20"/>
+        
+        <menuitem id="menu_government_national_vision"
+                  name="National Visions"
+                  parent="menu_government_vision"
+                  action="action_government_national_vision"
+                  sequence="1"/>
+        
+        <menuitem id="menu_government_strategic_axis"
+                  name="Strategic Axes"
+                  parent="menu_government_vision"
+                  action="action_government_strategic_axis"
+                  sequence="2"/>
+        
+        <!-- Government Decisions Menu -->
+        <menuitem id="menu_government_decisions"
+                  name="Government Decisions"
+                  parent="menu_government_project_root"
+                  sequence="30"/>
+        
+        <menuitem id="menu_government_decision_list"
+                  name="Decisions"
+                  parent="menu_government_decisions"
+                  action="action_government_decision"
+                  sequence="1"/>
+        
+        <!-- Finance Laws Menu -->
+        <menuitem id="menu_government_finance"
+                  name="Finance"
+                  parent="menu_government_project_root"
+                  sequence="40"/>
+        
+        <menuitem id="menu_government_finance_law"
+                  name="Finance Laws"
+                  parent="menu_government_finance"
+                  action="action_government_finance_law"
+                  sequence="1"/>
+        
+        <menuitem id="menu_government_finance_program_allocation"
+                  name="Program Allocations"
+                  parent="menu_government_finance"
+                  action="action_government_finance_program_allocation"
+                  sequence="2"/>
+        
+        <!-- Configuration Menu -->
+        <menuitem id="menu_government_configuration"
+                  name="Configuration"
+                  parent="menu_government_project_root"
+                  groups="senegal_gov_project_management.group_government_project_admin"
+                  sequence="100"/>
+        
+        <menuitem id="menu_government_ministry"
+                  name="Ministries"
+                  parent="menu_government_configuration"
+                  action="action_government_ministry"
+                  sequence="1"/>
+    </data>
+</odoo>

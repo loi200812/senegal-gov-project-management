@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Government Task Form View -->
+        <record id="view_project_government_task_form" model="ir.ui.view">
+            <field name="name">project.government.task.form</field>
+            <field name="model">project.government.task</field>
+            <field name="arch" type="xml">
+                <form string="Project Task">
+                    <header>
+                        <button name="action_start" type="object" string="Start Task" class="oe_highlight" 
+                                states="new" groups="senegal_gov_project_management.group_government_project_manager"/>
+                        <button name="action_block" type="object" string="Block Task" 
+                                states="in_progress" groups="senegal_gov_project_management.group_government_project_manager"/>
+                        <button name="action_done" type="object" string="Mark as Done" class="oe_highlight"
+                                states="in_progress,blocked" groups="senegal_gov_project_management.group_government_project_manager"/>
+                        <button name="action_cancel" type="object" string="Cancel Task"
+                                states="new,in_progress,blocked" groups="senegal_gov_project_management.group_government_project_manager"/>
+                        <button name="action_reset" type="object" string="Reset to New" 
+                                states="done,cancelled" groups="senegal_gov_project_management.group_government_ministry_official"/>
+                        <button name="action_view_qr_code" type="object" string="QR Code" class="btn-secondary"/>
+                        <button name="action_add_time_spent" type="object" string="Add Time &amp; Expenses" class="btn-primary"
+                                states="in_progress" groups="senegal_gov_project_management.group_government_project_manager"/>
+                        <field name="state" widget="statusbar" statusbar_visible="new,in_progress,blocked,done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_subtasks" type="object" class="oe_stat_button" icon="fa-tasks"
+                                    attrs="{'invisible': [('child_task_count', '=', 0)]}">
+                                <field name="child_task_count" widget="statinfo" string="Subtasks"/>
+                            </button>
+                        </div>
+                        <field name="qr_code" widget="image" class="oe_avatar" options="{'preview_image': 'qr_code'}"/>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="priority" widget="priority" class="mr-3"/>
+                                <field name="name" placeholder="Task Name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="active" invisible="1"/>
+                                <field name="project_id" options="{'no_create': True}"/>
+                                <field name="ministry_id" options="{'no_create': True}" readonly="1"/>
+                                <field name="assigned_to_id" options="{'no_create': True}"/>
+                                <field name="parent_task_id" domain="[('project_id', '=', project_id), ('id', '!=', active_id)]" options="{'no_create': True}"/>
+                                <field name="color" widget="color_picker" invisible="1"/>
+                                <field name="tags" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            </group>
+                            <group>
+                                <field name="start_date"/>
+                                <field name="deadline"/>
+                                <field name="completion_date" readonly="1" attrs="{'invisible': [('completion_date', '=', False)]}"/>
+                                <field name="kanban_state" widget="state_selection"/>
+                                <field name="progress" widget="progressbar"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Description" name="description">
+                                <field name="description" placeholder="Task description..."/>
+                            </page>
+                            <page string="Budget &amp; Expenses" name="budget">
+                                <group>
+                                    <group>
+                                        <field name="amount_planned" widget="monetary"/>
+                                        <field name="amount_spent" widget="monetary"/>
+                                    </group>
+                                    <group>
+                                        <field name="company_id" groups="base.group_multi_company" invisible="1"/>
+                                    </group>
+                                </group>
+                                <p class="text-muted" attrs="{'invisible': [('state', '!=', 'in_progress')]}">
+                                    Use the "Add Time &amp; Expenses" button to record time and expenses for this task.
+                                </p>
+                            </page>
+                            <page string="Subtasks" name="subtasks" attrs="{'invisible': [('child_task_count', '=', 0)]}">
+                                <field name="child_task_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="assigned_to_id"/>
+                                        <field name="deadline"/>
+                                        <field name="state"/>
+                                        <field name="progress" widget="progressbar"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Documents" name="documents">
+                                <field name="documents_ids" widget="many2many_binary"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Government Task Tree View -->
+        <record id="view_project_government_task_tree" model="ir.ui.view">
+            <field name="name">project.government.task.tree</field>
+            <field name="model">project.government.task</field>
+            <field name="arch" type="xml">
+                <tree string="Project Tasks" sample="1" decoration-muted="state == 'cancelled'" decoration-danger="state == 'blocked'" decoration-success="state == 'done'" decoration-info="state == 'new'">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="project_id"/>
+                    <field name="assigned_to_id"/>
+                    <field name="ministry_id"/>
+                    <field name="start_date"/>
+                    <field name="deadline"/>
+                    <field name="state"/>
+                    <field name="priority" widget="priority"/>
+                    <field name="progress" widget="progressbar"/>
+                    <field name="amount_spent" sum="Total Spent" widget="monetary"/>
+                    <field name="kanban_state" widget="state_selection"/>
+                    <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Government Task Search View -->
+        <record id="view_project_government_task_search" model="ir.ui.view">
+            <field name="name">project.government.task.search</field>
+            <field name="model">project.government.task</field>
+            <field name="arch" type="xml">
+                <search string="Search Tasks">
+                    <field name="name" string="Task"/>
+                    <field name="project_id"/>
+                    <field name="assigned_to_id"/>
+                    <field name="ministry_id"/>
+                    <separator/>
+                    <filter string="My Tasks" name="my_tasks" domain="[('assigned_to_id', '=', uid)]"/>
+                    <filter string="Unassigned" name="unassigned" domain="[('assigned_to_id', '=', False)]"/>
+                    <separator/>
+                    <filter string="New" name="new" domain="[('state', '=', 'new')]"/>
+                    <filter string="In Progress" name="in_progress" domain="[('state', '=', 'in_progress')]"/>
+                    <filter string="Blocked" name="blocked" domain="[('state', '=', 'blocked')]"/>
+                    <filter string="Done" name="done" domain="[('state', '=', 'done')]"/>
+                    <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+                    <separator/>
+                    <filter string="High Priority" name="high_priority" domain="[('priority', 'in', ['2', '3'])]"/>
+                    <filter string="Overdue" name="overdue" domain="[('deadline', '&lt;', context_today().strftime('%Y-%m-%d')), ('state', 'not in', ['done', 'cancelled'])]"/>
+                    <filter string="Due Today" name="today" domain="[('deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter string="Upcoming (7 days)" name="upcoming" domain="[('deadline', '&gt;=', context_today().strftime('%Y-%m-%d')), ('deadline', '&lt;=', (context_today()+datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                    <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Project" name="project" context="{'group_by': 'project_id'}"/>
+                        <filter string="Status" name="status" context="{'group_by': 'state'}"/>
+                        <filter string="Ministry" name="ministry" context="{'group_by': 'ministry_id'}"/>
+                        <filter string="Assigned To" name="assigned_to" context="{'group_by': 'assigned_to_id'}"/>
+                        <filter string="Deadline" name="deadline" context="{'group_by': 'deadline'}"/>
+                        <filter string="Priority" name="priority" context="{'group_by': 'priority'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Government Task Kanban View -->
+        <record id="view_project_government_task_kanban" model="ir.ui.view">
+            <field name="name">project.government.task.kanban</field>
+            <field name="model">project.government.task</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state" class="o_kanban_small_column" sample="1">
+                    <field name="name"/>
+                    <field name="project_id"/>
+                    <field name="state"/>
+                    <field name="assigned_to_id"/>
+                    <field name="priority"/>
+                    <field name="progress"/>
+                    <field name="kanban_state"/>
+                    <field name="color"/>
+                    <field name="deadline"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click
+                                                #{record.kanban_state.raw_value == 'blocked' ? 'oe_kanban_color_6' : ''} 
+                                                #{record.kanban_state.raw_value == 'done' ? 'oe_kanban_color_4' : ''}
+                                                #{record.priority.raw_value == '3' ? 'oe_kanban_color_2' : ''}
+                                                oe_kanban_has_border_color oe_kanban_color_#{kanban_color(record.color.raw_value)}">
+                                <div class="o_dropdown_kanban dropdown">
+                                    <a class="dropdown-toggle o-no-caret btn" role="button" data-toggle="dropdown" href="#" 
+                                       aria-label="Dropdown menu" title="Dropdown menu">
+                                        <span class="fa fa-ellipsis-v"/>
+                                    </a>
+                                    <div class="dropdown-menu" role="menu">
+                                        <t t-if="widget.editable">
+                                            <a role="menuitem" type="edit" class="dropdown-item">Edit</a>
+                                        </t>
+                                        <a role="menuitem" class="dropdown-item" name="action_view_qr_code" type="object">QR Code</a>
+                                        <div role="separator" class="dropdown-divider"/>
+                                        <ul class="oe_kanban_colorpicker" data-field="color"/>
+                                    </div>
+                                </div>
+                                <div class="oe_kanban_content">
+                                    <div>
+                                        <strong class="o_kanban_record_title">
+                                            <field name="priority" widget="priority" class="mr-1"/>
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                    <div class="text-muted">
+                                        <field name="project_id"/>
+                                    </div>
+                                    <div>
+                                        <span class="o_value"><field name="progress"/>%</span>
+                                        <div class="progress o_progress" style="height: 4px;">
+                                            <div class="progress-bar" role="progressbar" t-att-style="'width: ' + record.progress.value + '%'" t-att-aria-valuenow="record.progress.value" aria-valuemin="0" aria-valuemax="100"/>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_record_bottom">
+                                        <div class="oe_kanban_bottom_left">
+                                            <field name="kanban_state" widget="state_selection"/>
+                                            <t t-if="record.deadline.value">
+                                                <span class="badge badge-pill" t-att-class="record.deadline.raw_value &lt; (new Date()).toISOString().split('T')[0] ? 'bg-danger' : ''">
+                                                    <i class="fa fa-clock-o"/> <field name="deadline"/>
+                                                </span>
+                                            </t>
+                                        </div>
+                                        <div class="oe_kanban_bottom_right">
+                                            <field name="assigned_to_id" widget="many2one_avatar_user"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Government Task Calendar View -->
+        <record id="view_project_government_task_calendar" model="ir.ui.view">
+            <field name="name">project.government.task.calendar</field>
+            <field name="model">project.government.task</field>
+            <field name="arch" type="xml">
+                <calendar string="Tasks" date_start="start_date" date_stop="deadline" color="project_id" mode="month">
+                    <field name="name"/>
+                    <field name="project_id"/>
+                    <field name="assigned_to_id"/>
+                    <field name="state"/>
+                </calendar>
+            </field>
+        </record>
+
+        <!-- Government Task Pivot View -->
+        <record id="view_project_government_task_pivot" model="ir.ui.view">
+            <field name="name">project.government.task.pivot</field>
+            <field name="model">project.government.task</field>
+            <field name="arch" type="xml">
+                <pivot string="Task Analysis" sample="1">
+                    <field name="project_id" type="row"/>
+                    <field name="state" type="col"/>
+                    <field name="amount_spent" type="measure" string="Amount Spent"/>
+                    <field name="progress" type="measure" string="Progress (%)"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- Government Task Action -->
+        <record id="action_project_government_task" model="ir.actions.act_window">
+            <field name="name">Project Tasks</field>
+            <field name="res_model">project.government.task</field>
+            <field name="view_mode">kanban,tree,form,calendar,pivot</field>
+            <field name="context">{'search_default_in_progress': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new task
+                </p>
+                <p>
+                    Track tasks for government projects with detailed progress tracking and expense reporting.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

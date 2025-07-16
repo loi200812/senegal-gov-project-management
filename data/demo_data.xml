@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Finance Laws -->
+        <record id="finance_law_2023" model="government.finance.law">
+            <field name="name">Finance Law 2023</field>
+            <field name="reference">FL-2023-01</field>
+            <field name="year">2023</field>
+            <field name="type">initiale</field>
+            <field name="state">enacted</field>
+            <field name="enactment_date" eval="'2022-12-15'"/>
+            <field name="total_budget_allocated">6500000000</field>
+        </record>
+        
+        <record id="finance_law_2024" model="government.finance.law">
+            <field name="name">Finance Law 2024</field>
+            <field name="reference">FL-2024-01</field>
+            <field name="year">2024</field>
+            <field name="type">initiale</field>
+            <field name="state">enacted</field>
+            <field name="enactment_date" eval="'2023-12-20'"/>
+            <field name="total_budget_allocated">7200000000</field>
+        </record>
+        
+        <!-- Program Allocations -->
+        <record id="program_allocation_infrastructure_2024" model="government.finance.program.allocation">
+            <field name="name">Infrastructure Development Program 2024</field>
+            <field name="code">IDP-2024</field>
+            <field name="finance_law_id" ref="finance_law_2024"/>
+            <field name="ministry_id" ref="ministry_infrastructure"/>
+            <field name="allocated_amount">1200000000</field>
+        </record>
+        
+        <record id="program_allocation_education_2024" model="government.finance.program.allocation">
+            <field name="name">Education Improvement Program 2024</field>
+            <field name="code">EIP-2024</field>
+            <field name="finance_law_id" ref="finance_law_2024"/>
+            <field name="ministry_id" ref="ministry_education"/>
+            <field name="allocated_amount">950000000</field>
+        </record>
+        
+        <record id="program_allocation_health_2024" model="government.finance.program.allocation">
+            <field name="name">Healthcare Access Program 2024</field>
+            <field name="code">HAP-2024</field>
+            <field name="finance_law_id" ref="finance_law_2024"/>
+            <field name="ministry_id" ref="ministry_health"/>
+            <field name="allocated_amount">850000000</field>
+        </record>
+        
+        <record id="program_allocation_agriculture_2024" model="government.finance.program.allocation">
+            <field name="name">Agricultural Modernization Program 2024</field>
+            <field name="code">AMP-2024</field>
+            <field name="finance_law_id" ref="finance_law_2024"/>
+            <field name="ministry_id" ref="ministry_agriculture"/>
+            <field name="allocated_amount">720000000</field>
+        </record>
+        
+        <!-- Government Decisions -->
+        <record id="decision_digital_strategy" model="government.decision">
+            <field name="name">National Digital Transformation Strategy</field>
+            <field name="reference">CM-2023-42</field>
+            <field name="type">conseil_ministres</field>
+            <field name="date" eval="'2023-09-15'"/>
+            <field name="state">published</field>
+            <field name="summary">The Council of Ministers has adopted the National Digital Transformation Strategy to accelerate Senegal's digital economy development over the next decade.</field>
+            <field name="concerned_ministries_ids" eval="[(4, ref('ministry_infrastructure'))]"/>
+        </record>
+        
+        <record id="decision_education_reform" model="government.decision">
+            <field name="name">Education System Reform Initiative</field>
+            <field name="reference">CM-2023-56</field>
+            <field name="type">conseil_ministres</field>
+            <field name="date" eval="'2023-11-10'"/>
+            <field name="state">published</field>
+            <field name="summary">The Council of Ministers has approved the comprehensive education reform initiative aimed at improving the quality and accessibility of education at all levels.</field>
+            <field name="concerned_ministries_ids" eval="[(4, ref('ministry_education'))]"/>
+        </record>
+        
+        <!-- Projects -->
+        <record id="project_digital_connectivity" model="project.government.project">
+            <field name="name">National Digital Connectivity Initiative</field>
+            <field name="code">NDCI-2024</field>
+            <field name="description">A comprehensive project to expand internet connectivity to all regions of Senegal, with a focus on rural areas.</field>
+            <field name="start_date" eval="'2024-03-01'"/>
+            <field name="end_date" eval="'2026-12-31'"/>
+            <field name="state">in_progress</field>
+            <field name="actual_start_date" eval="'2024-03-15'"/>
+            <field name="responsible_ministry_id" ref="ministry_infrastructure"/>
+            <field name="strategic_axis_id" ref="strategic_axis_infrastructure"/>
+            <field name="total_budget">450000000</field>
+            <field name="current_budget">450000000</field>
+            <field name="progress">25</field>
+            <field name="priority">2</field>
+            <field name="decision_ids" eval="[(4, ref('decision_digital_strategy'))]"/>
+            <field name="finance_law_allocations_ids" eval="[(4, ref('program_allocation_infrastructure_2024'))]"/>
+            <field name="location">Nationwide</field>
+            <field name="impact_indicators">- Percentage of population with internet access
+- Average internet speed across regions
+- Number of public institutions connected</field>
+        </record>
+        
+        <!-- Tasks -->
+        <record id="task_feasibility_study" model="project.government.task">
+            <field name="name">Conduct Nationwide Connectivity Feasibility Study</field>
+            <field name="project_id" ref="project_digital_connectivity"/>
+            <field name="description">Conduct comprehensive feasibility study across all regions to identify existing connectivity infrastructure and gaps.</field>
+            <field name="start_date" eval="'2024-03-15'"/>
+            <field name="deadline" eval="'2024-05-15'"/>
+            <field name="state">done</field>
+            <field name="progress">100</field>
+            <field name="completion_date" eval="'2024-05-10'"/>
+            <field name="amount_planned">15000000</field>
+            <field name="amount_spent">14500000</field>
+            <field name="priority">2</field>
+        </record>
+        
+        <!-- Report -->
+        <record id="report_digital_connectivity_q2" model="project.government.report">
+            <field name="name">National Digital Connectivity Initiative - Q2 2024 Report</field>
+            <field name="project_id" ref="project_digital_connectivity"/>
+            <field name="report_type">quarterly</field>
+            <field name="report_date" eval="'2024-06-30'"/>
+            <field name="period_start" eval="'2024-04-01'"/>
+            <field name="period_end" eval="'2024-06-30'"/>
+            <field name="status">draft</field>
+            <field name="summary">This quarterly report provides an overview of the progress made on the National Digital Connectivity Initiative during Q2 2024.</field>
+            <field name="content">The project has achieved significant milestones during Q2 2024, including completion of the feasibility study and initiation of equipment procurement processes.</field>
+            <field name="key_achievements">- Completed nationwide feasibility study
+- Initiated procurement process for telecommunications equipment
+- Established project coordination team</field>
+            <field name="challenges">- Delays in some regional assessments due to accessibility issues
+- Need for additional technical expertise in certain areas</field>
+            <field name="recommendations">- Accelerate procurement timeline
+- Engage additional technical consultants
+- Strengthen coordination with regional authorities</field>
+            <field name="project_progress">25</field>
+            <field name="project_budget_usage">24</field>
+        </record>
+    </data>
+</odoo>

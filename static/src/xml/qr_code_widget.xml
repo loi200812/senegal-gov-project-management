@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="senegal_gov_project_management.QRCodeWidget" owl="1">
+        <div class="o_qr_code_container">
+            <div class="text-center">
+                <img t-if="imageSrc" class="o_qr_code_img" t-att-src="imageSrc" style="max-width: 150px;"/>
+                <div t-if="imageSrc">
+                    <button class="btn btn-sm btn-secondary mt-2" t-on-click="onClickEnlarge">
+                        <i class="fa fa-search-plus"/> Enlarge
+                    </button>
+                </div>
+                <div t-else="" class="text-muted">
+                    No QR Code available
+                </div>
+            </div>
+        </div>
+    </t>
+    
+    <t t-name="senegal_gov_project_management.QRCodeDialog" owl="1">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">QR Code</h4>
+                    <button type="button" class="btn-close" t-on-click="props.close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img t-att-src="props.imageSrc" style="max-width: 400px;"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" t-on-click="downloadQRCode">
+                        Download
+                    </button>
+                    <button type="button" class="btn btn-secondary" t-on-click="props.close">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

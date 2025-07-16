@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Strategic Axis Form View -->
+        <record id="view_government_strategic_axis_form" model="ir.ui.view">
+            <field name="name">government.strategic.axis.form</field>
+            <field name="model">government.strategic.axis</field>
+            <field name="arch" type="xml">
+                <form string="Strategic Axis">
+                    <header>
+                        <button name="action_view_projects" type="object" class="oe_highlight" string="View Projects"/>
+                        <button name="action_view_qr_code" type="object" string="QR Code" class="btn-secondary"/>
+                    </header>
+                    <sheet>
+                        <field name="qr_code" widget="image" class="oe_avatar" options="{'preview_image': 'qr_code'}"/>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1><field name="name" placeholder="Axis Name"/></h1>
+                            <h3>
+                                <field name="code" placeholder="Axis Code"/>
+                            </h3>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="active" invisible="1"/>
+                                <field name="vision_id" options="{'no_create': True}"/>
+                                <field name="sequence"/>
+                                <field name="project_count"/>
+                                <field name="color" widget="color_picker"/>
+                            </group>
+                            <group>
+                                <field name="ministry_ids" widget="many2many_tags"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Description" name="description">
+                                <field name="description" nolabel="1" placeholder="Detailed description of this strategic axis..."/>
+                            </page>
+                            <page string="Target Metrics" name="metrics">
+                                <field name="target_metrics" nolabel="1" placeholder="Key performance indicators for this strategic axis..."/>
+                            </page>
+                            <page string="Projects" name="projects">
+                                <field name="project_ids" nolabel="1">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="responsible_ministry_id"/>
+                                        <field name="state"/>
+                                        <field name="progress" widget="progressbar"/>
+                                        <field name="current_budget" sum="Total Budget"/>
+                                        <field name="spent_amount" sum="Total Spent"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Documents" name="documents">
+                                <field name="attachment_ids" nolabel="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Strategic Axis Tree View -->
+        <record id="view_government_strategic_axis_tree" model="ir.ui.view">
+            <field name="name">government.strategic.axis.tree</field>
+            <field name="model">government.strategic.axis</field>
+            <field name="arch" type="xml">
+                <tree string="Strategic Axes" sample="1">
+                    <field name="sequence" widget="handle"/>
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="vision_id"/>
+                    <field name="project_count"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Strategic Axis Search View -->
+        <record id="view_government_strategic_axis_search" model="ir.ui.view">
+            <field name="name">government.strategic.axis.search</field>
+            <field name="model">government.strategic.axis</field>
+            <field name="arch" type="xml">
+                <search string="Search Strategic Axes">
+                    <field name="name" string="Axis"/>
+                    <field name="code"/>
+                    <field name="vision_id"/>
+                    <field name="ministry_ids"/>
+                    <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="National Vision" name="vision" context="{'group_by': 'vision_id'}"/>
+                        <filter string="Company" name="company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Strategic Axis Kanban View -->
+        <record id="view_government_strategic_axis_kanban" model="ir.ui.view">
+            <field name="name">government.strategic.axis.kanban</field>
+            <field name="model">government.strategic.axis</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" default_group_by="vision_id" sample="1">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="vision_id"/>
+                    <field name="project_count"/>
+                    <field name="color"/>
+                    <field name="id"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click oe_kanban_card oe_kanban_has_border_color
+                                                oe_kanban_color_#{kanban_color(record.color.raw_value)}">
+                                <div class="o_dropdown_kanban dropdown">
+                                    <a class="dropdown-toggle o-no-caret btn" role="button" data-toggle="dropdown" href="#" 
+                                       aria-label="Dropdown menu" title="Dropdown menu">
+                                        <span class="fa fa-ellipsis-v"/>
+                                    </a>
+                                    <div class="dropdown-menu" role="menu">
+                                        <t t-if="widget.editable">
+                                            <a role="menuitem" type="edit" class="dropdown-item">Edit</a>
+                                        </t>
+                                        <a role="menuitem" class="dropdown-item" name="action_view_projects" type="object">View Projects</a>
+                                    </div>
+                                </div>
+                                <div class="oe_kanban_content">
+                                    <div class="o_kanban_record_title">
+                                        <strong><field name="name"/></strong>
+                                    </div>
+                                    <div class="o_kanban_record_subtitle">
+                                        <field name="code"/>
+                                    </div>
+                                    <div class="o_kanban_record_bottom">
+                                        <div class="oe_kanban_bottom_left">
+                                            <field name="vision_id"/>
+                                        </div>
+                                        <div class="oe_kanban_bottom_right">
+                                            <span class="badge badge-info">
+                                                <i class="fa fa-tasks"/> <field name="project_count"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Strategic Axis Action -->
+        <record id="action_government_strategic_axis" model="ir.actions.act_window">
+            <field name="name">Strategic Axes</field>
+            <field name="res_model">government.strategic.axis</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new strategic axis
+                </p>
+                <p>
+                    Strategic axes define the main pillars of the national vision.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

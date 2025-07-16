@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_project_government_report_wizard_form" model="ir.ui.view">
+            <field name="name">project.government.report.wizard.form</field>
+            <field name="model">project.government.report.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Generate Project Report">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="project_id" options="{'no_create': True}" readonly="context.get('default_project_id', False)"/>
+                                <field name="report_type"/>
+                                <field name="report_date"/>
+                            </group>
+                            <group>
+                                <field name="period_start"/>
+                                <field name="period_end"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Report Content" name="content">
+                                <group>
+                                    <field name="include_tasks"/>
+                                    <field name="include_budget"/>
+                                    <field name="include_decisions"/>
+                                    <field name="include_challenges"/>
+                                </group>
+                                <div class="alert alert-info" role="alert">
+                                    <p>The report will be generated with the selected content sections.
+                                    You will be able to edit the content after generation.</p>
+                                </div>
+                            </page>
+                        </notebook>
+                        <footer>
+                            <button name="action_generate_report" string="Generate Report" type="object" class="btn-primary"/>
+                            <button string="Cancel" class="btn-secondary" special="cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Project Report -->
+        <record id="action_report_government_project" model="ir.actions.report">
+            <field name="name">Project Report</field>
+            <field name="model">project.government.report</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">senegal_gov_project_management.report_government_project</field>
+            <field name="report_file">senegal_gov_project_management.report_government_project</field>
+            <field name="print_report_name">'Project Report - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_project_government_report"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <!-- QR Code Report -->
+        <record id="action_report_qr_code" model="ir.actions.report">
+            <field name="name">QR Code</field>
+            <field name="model">gov.qr.code.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">senegal_gov_project_management.report_qr_code</field>
+            <field name="report_file">senegal_gov_project_management.report_qr_code</field>
+            <field name="print_report_name">'QR Code - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_gov_qr_code_wizard"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <!-- Project Dashboard Report -->
+        <record id="action_report_project_dashboard" model="ir.actions.report">
+            <field name="name">Project Dashboard</field>
+            <field name="model">project.government.project</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">senegal_gov_project_management.report_project_dashboard</field>
+            <field name="report_file">senegal_gov_project_management.report_project_dashboard</field>
+            <field name="print_report_name">'Dashboard - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_project_government_project"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

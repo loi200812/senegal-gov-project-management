@@ -1,0 +1,120 @@
+// Custom styles for Government Project Management Module
+
+// Dashboard cards
+.o_gov_dashboard_card {
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    height: 100%;
+    
+    .card-value {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+    
+    .card-title {
+        color: #6c757d;
+        font-size: 1rem;
+        margin-bottom: 0;
+    }
+}
+
+// Progress bars
+.o_gov_progress_container {
+    margin: 1rem 0;
+    
+    .o_progress_label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.25rem;
+    }
+    
+    .o_progress {
+        height: 8px;
+        border-radius: 4px;
+    }
+}
+
+// QR code styling
+.o_qr_code_container {
+    padding: 1rem;
+    
+    .o_qr_code_img {
+        border: 1px solid #eee;
+        padding: 0.5rem;
+        background-color: white;
+    }
+}
+
+// Project kanban card
+.o_kanban_card.o_gov_project_card {
+    border-left: 3px solid;
+    
+    &.o_priority_high {
+        border-left-color: #dc3545;
+    }
+    
+    &.o_priority_medium {
+        border-left-color: #ffc107;
+    }
+    
+    &.o_priority_low {
+        border-left-color: #28a745;
+    }
+}
+
+// Status badges
+.o_gov_status_badge {
+    padding: 0.3rem 0.6rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: normal;
+    
+    &.draft {
+        background-color: #e9ecef;
+        color: #495057;
+    }
+    
+    &.in_progress {
+        background-color: #cfe2ff;
+        color: #0d6efd;
+    }
+    
+    &.on_hold {
+        background-color: #fff3cd;
+        color: #ffc107;
+    }
+    
+    &.completed {
+        background-color: #d1e7dd;
+        color: #198754;
+    }
+    
+    &.cancelled {
+        background-color: #f8d7da;
+        color: #dc3545;
+    }
+}
+
+// Report styling
+.o_gov_report {
+    .report-header {
+        border-bottom: 2px solid #dee2e6;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+    }
+    
+    .report-section {
+        margin-bottom: 2rem;
+    }
+    
+    .report-footer {
+        border-top: 1px solid #dee2e6;
+        margin-top: 2rem;
+        padding-top: 1rem;
+        text-align: center;
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+}
