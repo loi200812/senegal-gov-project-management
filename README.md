@@ -76,7 +76,7 @@ After installation, configure:
 - **Category**: Project Management
 - **License**: LGPL-3
 - **Author**: Senegal Government
-- **Website**: https://www.gouv.sn
+- **Website**: https://dakande.my.canva.site/introduction-loi-2008-12-et-risques-juridiques#votre-bo%C3%AEte-%C3%A0
 
 ## Support
 
